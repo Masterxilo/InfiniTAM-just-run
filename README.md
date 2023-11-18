@@ -13,9 +13,13 @@ I have created automated scripts that take care of setting up everything require
 You can dig into the code to see which dependencies are used and why.
 
 # Requirements
-- Ubuntu 22.04 or Windows 10/11 on an x86_64 aka. amd64 processor
+## Minimum
+- Ubuntu 22.04 or Windows 10/11 (WSL also supported) on an x86_64 aka. amd64 processor
   - no additional software needs to be preinstalled, you just need a user with root/sudo/admin privileges on your system
-- CUDA-capable NVIDIA GTX 8800-series or above (tested with NVIDIA GeForce RTX 2080)
+
+## Additional Hardware
+- for WITH_CUDA: CUDA-capable NVIDIA GTX 8800-series or above (tested with NVIDIA GeForce RTX 2080)
+- supports original Kinect and XBOX One Kinect (?): TODO test
 
 # How to Run
 
