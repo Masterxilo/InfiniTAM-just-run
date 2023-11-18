@@ -9,6 +9,7 @@ trap 'echo FATAL ERROR EXIT CODE $? AT $0:$LINENO' ERR
 #   WITH_CUDA=true ./run
 #
 
+export WITH_CUDA=${WITH_CUDA:-false}
 
 which make || sudo apt-get install -y build-essential
 
@@ -58,21 +59,19 @@ cd InfiniTAM
 rm -rf CMakeFiles # cmake "$(realpath .)" --target clean
 git clean -fX
 rm -rf build
-
 mkdir build
+
 cd build
-
 #     -DCUDA_CUDART_LIBRARY=$CUDA_CUDART_LIBRARY -DCUDA_TOOLKIT_INCLUDE=$CUDA_TOOLKIT_INCLUDE \
-cmake "$(realpath ..)" \
-    -DOPEN_NI_ROOT="$(realpath ../../$openni2d)" \
-    -DWITH_CUDA="${WITH_CUDA:-false}"
-
-make clean
-make
-
+#cmake "$(realpath ..)" -DOPEN_NI_ROOT="$(realpath ../../$openni2d)" -DWITH_CUDA="${WITH_CUDA:-false}"
+#make clean
+#make
+cd ..
 
 # this should also work:
+rm -rf build
 #./build-nix.sh 'Unix Makefiles' Debug
+./build-nix.sh 'Unix Makefiles' Release
 
 )
 

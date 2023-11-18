@@ -26,9 +26,9 @@ then
 
   if [ "$1" == "Ninja" ] && [ $PLATFORM == "mac" ]
   then
-    cmake -G"$1" -DCMAKE_BUILD_TYPE=$2 -DCMAKE_MAKE_PROGRAM="/usr/local/Cellar/ninja/1.7.2/bin/ninja" ..
+    cmake -G"$1" -DCMAKE_BUILD_TYPE=$2 -DWITH_CUDA=${WITH_CUDA:-false} -DCMAKE_MAKE_PROGRAM="/usr/local/Cellar/ninja/1.7.2/bin/ninja" ..
   else
-    cmake -G"$1" -DCMAKE_BUILD_TYPE=$2 ..
+    cmake -G"$1" -DCMAKE_BUILD_TYPE=$2 -DWITH_CUDA=${WITH_CUDA:-false} ..
   fi
 
   # Note: We need to configure twice to handle conditional building.
@@ -37,7 +37,7 @@ then
   cd ..
 fi
 
-#cd build
+cd build
 
 echo "[InfiniTAM] ...Running build..."
 

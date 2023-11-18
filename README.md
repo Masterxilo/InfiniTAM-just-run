@@ -5,7 +5,7 @@ STATUS: WORK-IN-PROGRESS
 This is forked from https://github.com/victorprad/InfiniTAM and you should definitely read their readme and https://infinitam.org/ to know what this project is all about.
 
 However, as I am absolutely opposed to giving any lengthy instructions to humans.
-I found it an apalling waste of our precious time to list dependencies and steps and whatnot that are necessary to be taken get this code to do what it is supposed to.
+I found it an apalling waste of our precious time to list dependencies and steps needed get this code to do what it is supposed to.
 One may list dependencies to explain what they are for, but never for a human to research how to get that dependency installed.
 That is a system maintainer's job.
 
@@ -19,7 +19,7 @@ You can dig into the code to see which dependencies are used and why.
 
 ## Additional Hardware
 - for WITH_CUDA: CUDA-capable NVIDIA GTX 8800-series or above (tested with NVIDIA GeForce RTX 2080)
-- supports original Kinect and XBOX One Kinect (?): TODO test
+- supports original Kinect and XBOX One Kinect (?) for Live Capture: TODO test
 
 # How to Run
 
