@@ -28,16 +28,19 @@ if test "${WITH_CUDA:-false}" == true ; then
     OLDPATH="$PATH"
 
     echo "Your NVIDIA device:"
-    lspci | grep -i nvidia | grep -i vga
+    ( lspci | grep -i nvidia | grep -i vga ) || ( lspci | grep -i '3D controller' | grep -i Microsoft ) # wsl: 988f:00:00.0 3D controller: Microsoft Corporation Device 008e
 
     # Install nvidia driver https://ubuntu.com/server/docs/nvidia-drivers-installation
-    sudo ubuntu-drivers list
-    sudo ubuntu-drivers list --gpgpu
-    sudo ubuntu-drivers install nvidia
-    echo "You will need to reboot for the driver to work! Otherwise, you will see:"
-    echo "cuda_compute_capability.cpp
--- Compile: Couldn't get device count: no CUDA-capable device is detected
-"
+    # not needed on WSL, assuming host already has nvidia drivers
+    if ! which explorer.exe ; then
+        sudo ubuntu-drivers list
+        sudo ubuntu-drivers list --gpgpu
+        sudo ubuntu-drivers install nvidia
+        echo "You will need to reboot for the driver to work! Otherwise, you will see:"
+        echo "cuda_compute_capability.cpp
+    -- Compile: Couldn't get device count: no CUDA-capable device is detected
+    "
+    fi
 
     # install nvcc
     export PATH="/usr/local/cuda-11.8/bin:/usr/local/cuda-11.5/bin:/usr/local/cuda-12.3/bin:$OLDPATH"
@@ -70,27 +73,38 @@ cd InfiniTAM
 #export CUDA_CUDART_LIBRARY=/usr/local/cuda-11.8/lib64/libcudart.so
 #export CUDA_TOOLKIT_INCLUDE=/usr/local/cuda-11.8/include
 
+# clean
+if true ; then
 rm -rf CMakeFiles # cmake "$(realpath .)" --target clean
 git clean -fX
 rm -rf build
-mkdir build
+fi
+
+# Ensure build dir exists
+mkdir -p build
 
 cd build
 #     -DCUDA_CUDART_LIBRARY=$CUDA_CUDART_LIBRARY -DCUDA_TOOLKIT_INCLUDE=$CUDA_TOOLKIT_INCLUDE \
-#cmake "$(realpath ..)" -DOPEN_NI_ROOT="$(realpath ../../$openni2d)" -DWITH_CUDA="${WITH_CUDA:-false}"
+
+cmake "$(realpath ..)" -DCMAKE_BUILD_TYPE=Release -DOPEN_NI_ROOT="$(realpath ../../$openni2d)" -DWITH_CUDA="${WITH_CUDA:-false}"
 #make clean
-#make
+make
+
 cd ..
 
 # this should also work:
-rm -rf build
+if false ; then
+rm -rf build # build-nix expects this folder to not exist
 #./build-nix.sh 'Unix Makefiles' Debug
 ./build-nix.sh 'Unix Makefiles' Release
+fi
 
 )
 
 pwd
 
-./data/download
+./scripts/dist
+
+./data/download-teddy
 #./InfiniTAM/build/Apps/InfiniTAM_cli/InfiniTAM_cli Teddy/calib.txt Teddy/Frames/%04i.ppm Teddy/Frames/%04i.pgm
 ./InfiniTAM/build/Apps/InfiniTAM/InfiniTAM Teddy/calib.txt Teddy/Frames/%04i.ppm Teddy/Frames/%04i.pgm

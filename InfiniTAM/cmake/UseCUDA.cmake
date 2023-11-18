@@ -2,11 +2,14 @@
 # UseCUDA.cmake #
 #################
 
-FIND_PACKAGE(CUDA QUIET)
+FIND_PACKAGE(CUDA QUIET) # FindCUDA deprecated since cmake 3.10
 
-OPTION(WITH_CUDA "Build with CUDA support?" ${CUDA_FOUND})
+#OPTION(WITH_CUDA "Build with CUDA support?" ${CUDA_FOUND})
+OPTION(WITH_CUDA "Build with CUDA support?" false)
 
 IF(WITH_CUDA)
+  enable_language(CUDA) # CMake 3.27 https://cmake.org/cmake/help/latest/policy/CMP0146.html
+
   # Auto-detect the CUDA compute capability.
   SET(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
   IF(NOT DEFINED CUDA_COMPUTE_CAPABILITY)

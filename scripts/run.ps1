@@ -1,14 +1,13 @@
 # usage
-#  .\run.ps1
+#  .\scripts\run.ps1
 #
-#  $env:WITH_CUDA=true ; .\run.ps1
+#  $env:WITH_CUDA=true ; .\scripts\run.ps1
+$ErrorActionPreference = "Stop"
+Set-StrictMode -Version Latest
 
 if (-not ($env:WITH_CUDA -eq "true")) {
     $env:WITH_CUDA="false"
 }
-
-$ErrorActionPreference = "Stop"
-Set-StrictMode -Version Latest
 
 # Install Chocolatey https://chocolatey.org/install
 try {
@@ -97,10 +96,18 @@ mkdir -Force .\build >$null
 
 # Manual build
 cd .\build
-cmake .. `
+
+if ($env:WITH_CUDA -eq "true") {
+    cmake .. `
     "-DOPEN_NI_ROOT=$env:OPEN_NI_ROOT" "-DGLUT_ROOT=$env:GLUT_ROOT" "-DGLUT_INCLUDE_DIR=$env:GLUT_INCLUDE_DIR" "-DGLUT_LIBRARY=$env:GLUT_LIBRARY" `
-    -DWITH_CUDA=$env:WITH_CUDA
- #   -DWITH_OPENNI=TRUE # todo doesnt work yet... i don't see x64-Release\OpenNI2.dll ?...
+    -DWITH_CUDA=true
+
+} else {
+    cmake .. `
+    "-DOPEN_NI_ROOT=$env:OPEN_NI_ROOT" "-DGLUT_ROOT=$env:GLUT_ROOT" "-DGLUT_INCLUDE_DIR=$env:GLUT_INCLUDE_DIR" "-DGLUT_LIBRARY=$env:GLUT_LIBRARY" `
+    -DWITH_CUDA=false -DCUDA_FOUND=false -DCUDA_TOOLKIT_INCLUDE=NOTFOUND
+
+}
 
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
@@ -109,7 +116,9 @@ if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 # after the build completes:
 cd ..\..
 
-./data/download.ps1
+./scripts/dist.ps1
+
+./data/download-teddy.ps1
 
 &.\InfiniTAM\build\Apps\InfiniTAM_cli\Release\InfiniTAM_cli.exe Teddy/calib.txt Teddy/Frames/%04i.ppm Teddy/Frames/%04i.pgm
 &.\InfiniTAM\build\Apps\InfiniTAM\Release\InfiniTAM.exe Teddy/calib.txt Teddy/Frames/%04i.ppm Teddy/Frames/%04i.pgm
