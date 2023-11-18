@@ -28,3 +28,5 @@ Makefile
 *.a
 /OpenNI2
 /freeglut*
+/Teddy
+

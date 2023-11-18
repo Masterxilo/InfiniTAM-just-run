@@ -7,6 +7,7 @@ try {
 } catch {
     Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 }
+
 try {
     Get-Command cmake
 } catch {
@@ -17,6 +18,20 @@ try {
     Import-Module $env:ChocolateyInstall\helpers\chocolateyProfile.psm1
     refreshenv
 }
+
+make --version
+cmake --version
+
+try {
+    Get-Command nvcc
+} catch {
+    choco install -y cuda
+
+    Import-Module $env:ChocolateyInstall\helpers\chocolateyProfile.psm1
+    refreshenv
+}
+nvcc --version
+
 
 if (-not (Test-Path .\OpenNI2)) {
     #wget.exe --no-clobber https://s3.amazonaws.com/com.occipital.openni/OpenNI-Windows-x64-2.2.0.33.zip
@@ -39,14 +54,21 @@ if (-not (Test-Path .\freeglut)) {
     Expand-Archive freeglut-MSVC.zip -DestinationPath .
 }
 
-$env:GLUT_ROOT=(ls ./freeglut).FullName
-$env:GLUT_INCLUDE_DIR=(ls ./freeglut/include).FullName
-$env:GLUT_LIBRARY=(ls ./freeglut/lib/x64/freeglut.lib).FullName
-$env:OPEN_NI_ROOT=(ls ./OpenNI2).FullName
+$build_bat=(gi ./scripts/build.bat).FullName
 
-mkdir -Force .\InfiniTAM\build >$null
+$env:GLUT_ROOT=(gi ./freeglut).FullName
+$env:GLUT_INCLUDE_DIR=(gi ./freeglut/include).FullName
+$env:GLUT_LIBRARY=(gi ./freeglut/lib/x64/freeglut.lib).FullName
+$env:OPEN_NI_ROOT=(gi ./OpenNI2).FullName
+
 cd .\InfiniTAM
 git clean -fX
+rm -re -fo .\build
+mkdir -Force .\build >$null
 
 cd .\build
-cmake .. "-DOPEN_NI_ROOT=$env:OPEN_NI_ROOT" "-DGLUT_ROOT=$env:GLUT_ROOT" "-DGLUT_INCLUDE_DIR=$env:GLUT_INCLUDE_DIR" "-DGLUT_LIBRARY=$env:GLUT_LIBRARY"
+cmake .. "-DOPEN_NI_ROOT=$env:OPEN_NI_ROOT" "-DGLUT_ROOT=$env:GLUT_ROOT" "-DGLUT_INCLUDE_DIR=$env:GLUT_INCLUDE_DIR" "-DGLUT_LIBRARY=$env:GLUT_LIBRARY" -DWITH_CUDA=FALSE
+
+&$build_bat
+
+# after the build completes:
