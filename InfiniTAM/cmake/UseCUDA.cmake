@@ -8,7 +8,7 @@ FIND_PACKAGE(CUDA QUIET) # FindCUDA deprecated since cmake 3.10
 OPTION(WITH_CUDA "Build with CUDA support?" false)
 
 IF(WITH_CUDA)
-  enable_language(CUDA) # CMake 3.27 https://cmake.org/cmake/help/latest/policy/CMP0146.html
+  #enable_language(CUDA) # CMake 3.27 https://cmake.org/cmake/help/latest/policy/CMP0146.html # TODO this gives > No CUDA toolset found; seems not needed?
 
   # Auto-detect the CUDA compute capability.
   SET(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
