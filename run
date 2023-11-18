@@ -1,0 +1,6 @@
+#!/bin/bash
+set -euo pipefail
+IFS=$'\n\t'
+trap 'echo FATAL ERROR EXIT CODE $? AT $0:$LINENO' ERR
+
+echo TODO
