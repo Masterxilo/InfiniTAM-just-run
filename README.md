@@ -1,4 +1,7 @@
 # InfiniTAM-just-run
+
+STATUS: WORK-IN-PROGRESS
+
 This is forked from https://github.com/victorprad/InfiniTAM and you should definitely read their readme and https://infinitam.org/ to know what this project is all about.
 
 However, as I am absolutely opposed to giving any lengthy instructions to humans.
@@ -30,3 +33,6 @@ In `cmd` or `powershell`, initially as an admin, do:
 ```cmd
 .\run
 ```
+
+# TODO
+Make this work in a (Docker) container, maybe in a devcontainer. Set up some kind of CI (gitlabci, circleci, travisci) to continuously test the run script still does what it should on a vanilla system.

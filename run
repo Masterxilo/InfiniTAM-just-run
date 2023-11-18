@@ -5,7 +5,19 @@ trap 'echo FATAL ERROR EXIT CODE $? AT $0:$LINENO' ERR
 
 
 which make || sudo apt-get install -y build-essential
-which nvcc || sudo apt-get install -y nvidia-cuda-toolkit
+
+# note: as a workaround to
+# https://stackoverflow.com/questions/74350584/nvcc-compilation-error-using-thrust-in-cuda-11-5
+# > /usr/include/c++/11/bits/std_function.h:435:145: error: parameter packs not expanded with ‘...’:
+# >   435 |         function(_Functor&& __f)
+# >       |                                                                                                                                                 ^ 
+# > /usr/include/c++/11/bits/std_function.h:435:145: note:         ‘_ArgTypes’
+# > /usr/include/c++/11/bits/std_function.h:530:146: error: parameter packs not expanded with ‘...’:
+# >   530 |         operator=(_Functor&& __f)
+# >       |                                                                                                                                                  ^ 
+# > /usr/include/c++/11/bits/std_function.h:530:146: note:         ‘_ArgTypes’
+# it seems a version if nvcc > 11.5 is required
+which nvcc || ./scripts/install-cuda # sudo apt-get install -y nvidia-cuda-toolkit
 
 openni2d='OpenNI-Linux-x64-2.2'
 if ! test -d "$openni2d" ; then
@@ -22,4 +34,7 @@ which cmake || sudo apt-get install -y cmake
 sudo apt-get install -y freeglut3-dev
 
 cd InfiniTAM
+
 cmake "$(realpath .)" -DOPEN_NI_ROOT="$(realpath ../$openni2d)"
+# this should also work:
+./build-nix.sh 'Unix Makefiles' Debug

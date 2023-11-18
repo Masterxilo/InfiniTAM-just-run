@@ -37,7 +37,7 @@ then
   cd ..
 fi
 
-cd build
+#cd build
 
 echo "[InfiniTAM] ...Running build..."
 
