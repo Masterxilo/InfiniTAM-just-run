@@ -29,4 +29,4 @@ Makefile
 /OpenNI2
 /freeglut*
 /Teddy
-
+/mesh.stl
