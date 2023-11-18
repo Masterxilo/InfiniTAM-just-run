@@ -3,6 +3,12 @@ set -euo pipefail
 IFS=$'\n\t'
 trap 'echo FATAL ERROR EXIT CODE $? AT $0:$LINENO' ERR
 
+#
+# usage:
+#   ./run
+#   WITH_CUDA=true ./run
+#
+
 
 which make || sudo apt-get install -y build-essential
 
@@ -19,13 +25,13 @@ which make || sudo apt-get install -y build-essential
 # it seems a version if nvcc > 11.5 is required; 11.8 seems good, I did not yet get it to work with 12.3...
 if test "${WITH_CUDA:-false}" == true ; then
     export PATH="/usr/local/cuda-11.8/bin:$PATH"
-    if ! which nvcc || nvcc --version | grep '11.5' ; then 
+    if ! which nvcc || ( nvcc --version | grep '11.5' ) ; then 
         ./scripts/install-cuda # sudo apt-get install -y nvidia-cuda-toolkit
     fi
 
     # should not be necessary...? yes it should: https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#post-installation-actions
-    #export PATH="/usr/local/cuda-12.3/bin:$PATH"
-    export PATH="/usr/local/cuda-11.8/bin:$PATH"
+    export PATH="/usr/local/cuda-12.3/bin:$PATH"
+    #export PATH="/usr/local/cuda-11.8/bin:$PATH"
     nvcc --version
 fi
 
@@ -46,20 +52,21 @@ sudo apt-get install -y freeglut3-dev
 (
 cd InfiniTAM
 
-export CUDA_CUDART_LIBRARY=/usr/local/cuda-11.8/lib64/libcudart.so
-export CUDA_TOOLKIT_INCLUDE=/usr/local/cuda-11.8/include
+#export CUDA_CUDART_LIBRARY=/usr/local/cuda-11.8/lib64/libcudart.so
+#export CUDA_TOOLKIT_INCLUDE=/usr/local/cuda-11.8/include
 
-#rm -rf CMakeFiles # cmake "$(realpath .)" --target clean
+rm -rf CMakeFiles # cmake "$(realpath .)" --target clean
 git clean -fX
 rm -rf build
 
 mkdir build
 cd build
 
+#     -DCUDA_CUDART_LIBRARY=$CUDA_CUDART_LIBRARY -DCUDA_TOOLKIT_INCLUDE=$CUDA_TOOLKIT_INCLUDE \
 cmake "$(realpath ..)" \
     -DOPEN_NI_ROOT="$(realpath ../../$openni2d)" \
-    -DCUDA_CUDART_LIBRARY=$CUDA_CUDART_LIBRARY -DCUDA_TOOLKIT_INCLUDE=$CUDA_TOOLKIT_INCLUDE \
     -DWITH_CUDA="${WITH_CUDA:-false}"
+
 make clean
 make
 
@@ -73,7 +80,4 @@ pwd
 
 ./data/download
 #./InfiniTAM/build/Apps/InfiniTAM_cli/InfiniTAM_cli Teddy/calib.txt Teddy/Frames/%04i.ppm Teddy/Frames/%04i.pgm
-
 ./InfiniTAM/build/Apps/InfiniTAM/InfiniTAM Teddy/calib.txt Teddy/Frames/%04i.ppm Teddy/Frames/%04i.pgm
-
-
