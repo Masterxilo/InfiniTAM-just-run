@@ -10,6 +10,7 @@ sudo apt-get purge -y cuda-toolkit-12.3 || true
 sudo apt-get purge -y cuda-12.3 || true
 sudo apt-get purge -y cuda-repo-ubuntu2204-12-3-local || true
 sudo apt-get autoremove -y
+
 # dpkg -l 'cuda*'
 hash -r # remove any references to old nvcc
 

@@ -14,7 +14,7 @@ You can dig into the code to see which dependencies are used and why.
 
 # Requirements
 ## Minimum
-- Ubuntu 22.04 or Windows 10/11 (WSL also supported) on an x86_64 aka. amd64 processor
+- Ubuntu 22.04 or Windows 10/11 (WSL also supported) on an x86_64, aka. amd64, processor
   - no additional software needs to be preinstalled, you just need a user with root/sudo/admin privileges on your system
 
 ## Additional Hardware
@@ -40,3 +40,6 @@ In `cmd` or `powershell`, initially as an admin, do:
 
 # TODO
 Make this work in a (Docker) container, maybe in a devcontainer. Set up some kind of CI (gitlabci, circleci, travisci) to continuously test the run script still does what it should on a vanilla system.
+
+# Quirks
+- this codebase is incompatible with CUDA Toolkit version 11.5, which unfortunately at the moment is the default version installed by `sudo apt-get install -y nvidia-cuda-toolkit` on Ubuntu 22.04
