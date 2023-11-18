@@ -28,5 +28,9 @@ Makefile
 *.a
 /OpenNI2
 /freeglut*
-/Teddy
+
 /mesh.stl
+
+# data
+/Teddy
+/teddy*.zip*

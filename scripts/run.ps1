@@ -1,3 +1,12 @@
+# usage
+#  .\run.ps1
+#
+#  $env:WITH_CUDA=true ; .\run.ps1
+
+if (-not ($env:WITH_CUDA -eq "true")) {
+    $env:WITH_CUDA="false"
+}
+
 $ErrorActionPreference = "Stop"
 Set-StrictMode -Version Latest
 
@@ -22,26 +31,40 @@ try {
 make --version
 cmake --version
 
-try {
-    Get-Command nvcc
-} catch {
-    choco install -y cuda
+# cmake only detects MSVC_IDE if the actual IDE is present - buildtools are not enough...: ?
+#choco install -y visualstudio2022professional
+#choco install -y visualstudio2022community
+# nah, still get 'nmake' '-?' command not found...
 
-    Import-Module $env:ChocolateyInstall\helpers\chocolateyProfile.psm1
-    refreshenv
+# this is required for nmake:
+choco install -y visualstudio2022-workload-vctools
+
+if ($env:WITH_CUDA -eq "true") {
+    try {
+        &(gi "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v*\bin\nvcc.exe") --version
+    } catch {
+        choco install -y cuda
+
+        Import-Module $env:ChocolateyInstall\helpers\chocolateyProfile.psm1
+        refreshenv
+    }
+
+    &(gi "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v*\bin\nvcc.exe") --version
 }
-nvcc --version
 
-
+if ($False) {} # TODO OpenNI2 not really required ? skip entirely?
 if (-not (Test-Path .\OpenNI2)) {
     #wget.exe --no-clobber https://s3.amazonaws.com/com.occipital.openni/OpenNI-Windows-x64-2.2.0.33.zip
     #curl.exe https://s3.amazonaws.com/com.occipital.openni/OpenNI-Windows-x64-2.2.0.33.zip -o OpenNI-Windows-x64-2.2.0.33.zip
     cp ./lib/OpenNI-Windows-x64-2.2.0.33.zip .
-    Expand-Archive OpenNI-Windows-x64-2.2.0.33.zip
+    Expand-Archive -Force OpenNI-Windows-x64-2.2.0.33.zip
 
     # note: contains an .msi installer... install to
     # and also install the PrimeSense driver = XBOX Kinect sensor Windows driver... (PrimeSense made that tech, which is now in Apple's iPhone X face ID...)
     # .\OpenNI2\
+    &.\OpenNI-Windows-x64-2.2.0.33\OpenNI-Windows-x64-2.2.msi /quiet
+
+    (gi "C:\Program Files\OpenNI2").FullName
 }
 
 # https://github.com/FreeGLUTProject/freeglut
@@ -51,7 +74,7 @@ if (-not (Test-Path .\freeglut)) {
     #curl.exe -L https://www.transmissionzero.co.uk/files/software/development/GLUT/freeglut-MSVC.zip -o freeglut-MSVC.zip
 
     cp ./lib/freeglut-MSVC.zip .
-    Expand-Archive freeglut-MSVC.zip -DestinationPath .
+    Expand-Archive -Force freeglut-MSVC.zip -DestinationPath .
 }
 
 $build_bat=(gi ./scripts/build.bat).FullName
@@ -59,17 +82,24 @@ $build_bat=(gi ./scripts/build.bat).FullName
 $env:GLUT_ROOT=(gi ./freeglut).FullName
 $env:GLUT_INCLUDE_DIR=(gi ./freeglut/include).FullName
 $env:GLUT_LIBRARY=(gi ./freeglut/lib/x64/freeglut.lib).FullName
-$env:OPEN_NI_ROOT=(gi ./OpenNI2).FullName
+$env:OPEN_NI_ROOT=(gi "C:\Program Files\OpenNI2").FullName
 
 cd .\InfiniTAM
+
+# Cleanup, optional, for full rebuild; full rebuild is required if parameters like WITH_CUDA are changed and in general is more reproducible, but slower...
 git clean -fX
-rm -re -fo .\build
+rm -re -fo .\build -ErrorAction SilentlyContinue
+
+# Ensure build folder exists
 mkdir -Force .\build >$null
 
+# TODO try to use InfiniTAM\build-win.sh in WSL?... or cygwin?
+
+# Manual build
 cd .\build
 cmake .. `
     "-DOPEN_NI_ROOT=$env:OPEN_NI_ROOT" "-DGLUT_ROOT=$env:GLUT_ROOT" "-DGLUT_INCLUDE_DIR=$env:GLUT_INCLUDE_DIR" "-DGLUT_LIBRARY=$env:GLUT_LIBRARY" `
-    -DWITH_CUDA=TRUE
+    -DWITH_CUDA=$env:WITH_CUDA
  #   -DWITH_OPENNI=TRUE # todo doesnt work yet... i don't see x64-Release\OpenNI2.dll ?...
 
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
@@ -78,7 +108,8 @@ if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 # after the build completes:
 cd ..\..
-#&.\InfiniTAM\build\Apps\InfiniTAM\Debug\InfiniTAM.exe Teddy/calib.txt Teddy/Frames/%04i.ppm Teddy/Frames/%04i.pgm
-&.\InfiniTAM\build\Apps\InfiniTAM_cli\Release\InfiniTAM_cli.exe Teddy/calib.txt Teddy/Frames/%04i.ppm Teddy/Frames/%04i.pgm
 
+./data/download.ps1
+
+&.\InfiniTAM\build\Apps\InfiniTAM_cli\Release\InfiniTAM_cli.exe Teddy/calib.txt Teddy/Frames/%04i.ppm Teddy/Frames/%04i.pgm
 &.\InfiniTAM\build\Apps\InfiniTAM\Release\InfiniTAM.exe Teddy/calib.txt Teddy/Frames/%04i.ppm Teddy/Frames/%04i.pgm
