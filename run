@@ -16,8 +16,15 @@ which make || sudo apt-get install -y build-essential
 # >   530 |         operator=(_Functor&& __f)
 # >       |                                                                                                                                                  ^ 
 # > /usr/include/c++/11/bits/std_function.h:530:146: note:         ‘_ArgTypes’
-# it seems a version if nvcc > 11.5 is required
+# it seems a version if nvcc > 11.5 is required; 11.8 seems good, I did not yet get it to work with 12.3...
+export PATH="/usr/local/cuda-11.8/bin:$PATH"
 which nvcc || ./scripts/install-cuda # sudo apt-get install -y nvidia-cuda-toolkit
+
+# should not be necessary...? yes it should: https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#post-installation-actions
+#export PATH="/usr/local/cuda-12.3/bin:$PATH"
+export PATH="/usr/local/cuda-11.8/bin:$PATH"
+nvcc --version
+
 
 openni2d='OpenNI-Linux-x64-2.2'
 if ! test -d "$openni2d" ; then
@@ -35,6 +42,15 @@ sudo apt-get install -y freeglut3-dev
 
 cd InfiniTAM
 
-cmake "$(realpath .)" -DOPEN_NI_ROOT="$(realpath ../$openni2d)"
+export CUDA_CUDART_LIBRARY=/usr/local/cuda-11.8/lib64/libcudart.so
+export CUDA_TOOLKIT_INCLUDE=/usr/local/cuda-11.8/include
+
+#rm -rf CMakeFiles # cmake "$(realpath .)" --target clean
+git clean -fX
+cmake "$(realpath .)" -DOPEN_NI_ROOT="$(realpath ../$openni2d)" -DCUDA_CUDART_LIBRARY=$CUDA_CUDART_LIBRARY -DCUDA_TOOLKIT_INCLUDE=$CUDA_TOOLKIT_INCLUDE 
+make clean
+make
+
+#make clean
 # this should also work:
-./build-nix.sh 'Unix Makefiles' Debug
+#./build-nix.sh 'Unix Makefiles' Debug
