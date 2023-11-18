@@ -25,14 +25,28 @@ which make || sudo apt-get install -y build-essential
 # > /usr/include/c++/11/bits/std_function.h:530:146: note:         ‘_ArgTypes’
 # it seems a version if nvcc > 11.5 is required; 11.8 seems good, I did not yet get it to work with 12.3...
 if test "${WITH_CUDA:-false}" == true ; then
-    export PATH="/usr/local/cuda-11.8/bin:$PATH"
+    OLDPATH="$PATH"
+
+    echo "Your NVIDIA device:"
+    lspci | grep -i nvidia | grep -i vga
+
+    # Install nvidia driver https://ubuntu.com/server/docs/nvidia-drivers-installation
+    sudo ubuntu-drivers list
+    sudo ubuntu-drivers list --gpgpu
+    sudo ubuntu-drivers install nvidia
+    echo "You will need to reboot for the driver to work! Otherwise, you will see:"
+    echo "cuda_compute_capability.cpp
+-- Compile: Couldn't get device count: no CUDA-capable device is detected
+"
+
+    # install nvcc
+    export PATH="/usr/local/cuda-11.8/bin:/usr/local/cuda-11.5/bin:/usr/local/cuda-12.3/bin:$OLDPATH"
     if ! which nvcc || ( nvcc --version | grep '11.5' ) ; then 
         ./scripts/install-cuda # sudo apt-get install -y nvidia-cuda-toolkit
     fi
 
     # should not be necessary...? yes it should: https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#post-installation-actions
-    export PATH="/usr/local/cuda-12.3/bin:$PATH"
-    #export PATH="/usr/local/cuda-11.8/bin:$PATH"
+    export PATH="/usr/local/cuda-12.3/bin:$OLDPATH"
     nvcc --version
 fi
 
