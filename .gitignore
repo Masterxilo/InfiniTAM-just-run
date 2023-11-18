@@ -18,3 +18,10 @@ x64/
 
 # QtCreator CMake
 CMakeLists.txt.user*
+
+# 
+/OpenNI-*-2.*
+CMakeCache.txt
+cmake_install.cmake
+**/CMakeFiles/
+Makefile
