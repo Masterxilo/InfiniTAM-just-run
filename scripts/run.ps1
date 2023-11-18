@@ -79,4 +79,6 @@ if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 # after the build completes:
 cd ..\..
 #&.\InfiniTAM\build\Apps\InfiniTAM\Debug\InfiniTAM.exe Teddy/calib.txt Teddy/Frames/%04i.ppm Teddy/Frames/%04i.pgm
+&.\InfiniTAM\build\Apps\InfiniTAM_cli\Release\InfiniTAM_cli.exe Teddy/calib.txt Teddy/Frames/%04i.ppm Teddy/Frames/%04i.pgm
+
 &.\InfiniTAM\build\Apps\InfiniTAM\Release\InfiniTAM.exe Teddy/calib.txt Teddy/Frames/%04i.ppm Teddy/Frames/%04i.pgm

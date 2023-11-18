@@ -54,3 +54,9 @@ make
 #make clean
 # this should also work:
 #./build-nix.sh 'Unix Makefiles' Debug
+
+./InfiniTAM/Apps/InfiniTAM_cli/InfiniTAM_cli Teddy/calib.txt Teddy/Frames/%04i.ppm Teddy/Frames/%04i.pgm
+
+./InfiniTAM/Apps/InfiniTAM/InfiniTAM Teddy/calib.txt Teddy/Frames/%04i.ppm Teddy/Frames/%04i.pgm
+
+
