@@ -67,8 +67,16 @@ rm -re -fo .\build
 mkdir -Force .\build >$null
 
 cd .\build
-cmake .. "-DOPEN_NI_ROOT=$env:OPEN_NI_ROOT" "-DGLUT_ROOT=$env:GLUT_ROOT" "-DGLUT_INCLUDE_DIR=$env:GLUT_INCLUDE_DIR" "-DGLUT_LIBRARY=$env:GLUT_LIBRARY" -DWITH_CUDA=FALSE
+cmake .. `
+    "-DOPEN_NI_ROOT=$env:OPEN_NI_ROOT" "-DGLUT_ROOT=$env:GLUT_ROOT" "-DGLUT_INCLUDE_DIR=$env:GLUT_INCLUDE_DIR" "-DGLUT_LIBRARY=$env:GLUT_LIBRARY" `
+    -DWITH_CUDA=TRUE
+ #   -DWITH_OPENNI=TRUE # todo doesnt work yet... i don't see x64-Release\OpenNI2.dll ?...
+
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 &$build_bat
 
 # after the build completes:
+cd ..\..
+#&.\InfiniTAM\build\Apps\InfiniTAM\Debug\InfiniTAM.exe Teddy/calib.txt Teddy/Frames/%04i.ppm Teddy/Frames/%04i.pgm
+&.\InfiniTAM\build\Apps\InfiniTAM\Release\InfiniTAM.exe Teddy/calib.txt Teddy/Frames/%04i.ppm Teddy/Frames/%04i.pgm
