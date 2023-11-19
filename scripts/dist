@@ -17,7 +17,6 @@ mkdir -p dist
 cp ./InfiniTAM/build/Apps/InfiniTAM_cli/InfiniTAM_cli "./dist/InfiniTAM_cli$WITH_CUDA"
 cp ./InfiniTAM/build/Apps/InfiniTAM/InfiniTAM "./dist/InfiniTAM$WITH_CUDA"
 cp ./data/download-teddy ./dist
-cp ./scripts/InfiniTAM*.sh ./dist
 
 function f() {
 echo -n "#!/bin/bash
