@@ -19,11 +19,13 @@ cp ./InfiniTAM/build/Apps/InfiniTAM/InfiniTAM "./dist/InfiniTAM$WITH_CUDA"
 cp ./data/download-teddy ./dist
 
 function f() {
+    o="./dist/InfiniTAM$1.with-teddy$WITH_CUDA.sh"
 echo -n "#!/bin/bash
 set -euo pipefail
 ./download-teddy
 ./InfiniTAM$1$WITH_CUDA Teddy/calib.txt 'Teddy/Frames/%04i.ppm' 'Teddy/Frames/%04i.pgm'
-" > ./dist/InfiniTAM$1.with-teddy$WITH_CUDA.sh
+" > $o
+chmod +x $o
 }
 
 f ''
