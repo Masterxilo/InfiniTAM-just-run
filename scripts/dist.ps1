@@ -20,12 +20,16 @@ cp -Force .\InfiniTAM\build\Apps\InfiniTAM_cli\Release\*.dll .\dist
 cp .\InfiniTAM\build\Apps\InfiniTAM\Release\InfiniTAM.exe ".\dist\InfiniTAM$env:WITH_CUDA.exe"
 cp -Force .\InfiniTAM\build\Apps\InfiniTAM\Release\*.dll .\dist
 
+# msvc runtime
+cp -Force .\lib\*.dll .\dist
+
 cp .\data\download-teddy.ps1 .\dist
 
 function f($suffix) {
+    # Out-File -Encoding utf8 <- this adds a BOM!
 "echo %0 %*
-powershell.exe .\download-teddy.ps1
-.\InfiniTAM$suffix.exe Teddy/calib.txt `"Teddy/Frames/%%04i.ppm`" `"Teddy/Frames/%%04i.pgm`""| Out-File -Encoding utf8 .\dist\InfiniTAM$suffix.with-teddy$env:WITH_CUDA.bat
+call .\download-teddy.bat
+.\InfiniTAM$suffix$env:WITH_CUDA.exe Teddy/calib.txt `"Teddy/Frames/%%04i.ppm`" `"Teddy/Frames/%%04i.pgm`""| Out-File -Encoding ASCII .\dist\InfiniTAM$suffix.with-teddy$env:WITH_CUDA.bat
 }
 
 f ''
