@@ -39,9 +39,7 @@ cmake --version
 choco install -y visualstudio2022-workload-vctools
 
 if ($env:WITH_CUDA -eq "true") {
-    if (-not (Test-Path "C:\Program Files\NVIDIA Corporation")) {
-        choco install -y nvidia-display-driver # TODO is seems that when installed like this, the nvidia driver doesn't work in WSL? the WITH_CUDA version immediately crashes then... (segfault)
-    }
+
 
     try {
         &(gi "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v*\bin\nvcc.exe") --version
@@ -123,6 +121,14 @@ cd ..\..
 ./scripts/dist.ps1
 
 # run it once
+
+# must have driver to run (not required for compilation)
+if ($env:WITH_CUDA -eq "true") {
+    if (-not (Test-Path "C:\Program Files\NVIDIA Corporation")) {
+        choco install -y nvidia-display-driver # TODO is seems that when installed like this, the nvidia driver doesn't work in WSL? the WITH_CUDA version immediately crashes then... (segfault)
+    }
+}
+
 ./data/download-teddy.ps1
 
 &.\InfiniTAM\build\Apps\InfiniTAM_cli\Release\InfiniTAM_cli.exe Teddy/calib.txt Teddy/Frames/%04i.ppm Teddy/Frames/%04i.pgm

@@ -27,21 +27,6 @@ which make || sudo apt-get install -y build-essential
 if test "${WITH_CUDA:-false}" == true ; then
     OLDPATH="$PATH"
 
-    echo "Your NVIDIA device:"
-    ( lspci | grep -i nvidia | grep -i vga ) || ( lspci | grep -i '3D controller' | grep -i Microsoft ) # wsl: 988f:00:00.0 3D controller: Microsoft Corporation Device 008e
-
-    # Install nvidia driver https://ubuntu.com/server/docs/nvidia-drivers-installation
-    # not needed on WSL, assuming host already has nvidia drivers
-    if ! which explorer.exe ; then
-        sudo ubuntu-drivers list
-        sudo ubuntu-drivers list --gpgpu
-        sudo ubuntu-drivers install nvidia
-        echo "You will need to reboot for the driver to work! Otherwise, you will see:"
-        echo "cuda_compute_capability.cpp
-    -- Compile: Couldn't get device count: no CUDA-capable device is detected
-    "
-    fi
-
     # install nvcc
     export PATH="/usr/local/cuda-11.8/bin:/usr/local/cuda-11.5/bin:/usr/local/cuda-12.3/bin:$OLDPATH"
     if ! which nvcc || ( nvcc --version | grep '11.5' ) ; then 
@@ -106,6 +91,27 @@ pwd
 ./scripts/dist
 
 # run it once
+
+# must have device and driver to run with cuda
+if test "${WITH_CUDA:-false}" == true ; then
+    OLDPATH="$PATH"
+
+    echo "Your NVIDIA device:"
+    ( lspci | grep -i nvidia | grep -i vga ) || ( lspci | grep -i '3D controller' | grep -i Microsoft ) # wsl: 988f:00:00.0 3D controller: Microsoft Corporation Device 008e
+
+    # Install nvidia driver https://ubuntu.com/server/docs/nvidia-drivers-installation
+    # not needed on WSL, assuming host already has nvidia drivers
+    if ! which explorer.exe ; then
+        sudo ubuntu-drivers list
+        sudo ubuntu-drivers list --gpgpu
+        sudo ubuntu-drivers install nvidia
+        echo "You will need to reboot for the driver to work! Otherwise, you will see:"
+        echo "cuda_compute_capability.cpp
+    -- Compile: Couldn't get device count: no CUDA-capable device is detected
+    "
+    fi
+fi
+
 ./data/download-teddy
 
 ./InfiniTAM/build/Apps/InfiniTAM_cli/InfiniTAM_cli Teddy/calib.txt Teddy/Frames/%04i.ppm Teddy/Frames/%04i.pgm
