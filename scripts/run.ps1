@@ -40,7 +40,7 @@ choco install -y visualstudio2022-workload-vctools
 
 if ($env:WITH_CUDA -eq "true") {
     if (-not (Test-Path "C:\Program Files\NVIDIA Corporation")) {
-        choco install -y nvidia-display-driver
+        choco install -y nvidia-display-driver # TODO is seems that when installed like this, the nvidia driver doesn't work in WSL? the WITH_CUDA version immediately crashes then... (segfault)
     }
 
     try {
