@@ -123,13 +123,18 @@ cd ..\..
 # run it once
 
 # must have driver to run (not required for compilation)
+$x=""
 if ($env:WITH_CUDA -eq "true") {
+    $x=".WITH_CUDA"
     if (-not (Test-Path "C:\Program Files\NVIDIA Corporation")) {
-        choco install -y nvidia-display-driver # TODO is seems that when installed like this, the nvidia driver doesn't work in WSL? the WITH_CUDA version immediately crashes then... (segfault)
+        choco install -y nvidia-display-driver # TODO it seems that when installed like this, the nvidia driver doesn't work in WSL? the WITH_CUDA version immediately crashes then... (segfault)
     }
 }
 
-./data/download-teddy.ps1
-
-&.\InfiniTAM\build\Apps\InfiniTAM_cli\Release\InfiniTAM_cli.exe Teddy/calib.txt Teddy/Frames/%04i.ppm Teddy/Frames/%04i.pgm
-&.\InfiniTAM\build\Apps\InfiniTAM\Release\InfiniTAM.exe Teddy/calib.txt Teddy/Frames/%04i.ppm Teddy/Frames/%04i.pgm
+pushd .\dist
+try {
+&".\InfiniTAM_cli.with-teddy$x.bat"
+&".\InfiniTAM.with-teddy$x.bat"
+} finally {
+    popd
+}

@@ -32,6 +32,7 @@ cp --verbose ./InfiniTAM/build/Apps/InfiniTAM/InfiniTAM "./dist/InfiniTAM$WSL$WI
 cp --verbose ./data/download-teddy ./dist
 cp --verbose ./scripts/install-cuda-drivers ./dist
 
+# libglut.so.3: dynamically linked runtime dependency:
 function f() {
     output="./dist/InfiniTAM$1.with-teddy$WSL$WITH_CUDA.sh"
 
@@ -47,7 +48,6 @@ function f() {
     run || ($INSTALL_CUDA_DRIVERS && run)
     " > "$output"
     chmod +x "$output"
-
 }
 
 f ''

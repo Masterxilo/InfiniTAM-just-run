@@ -95,15 +95,15 @@ fi
 ./scripts/dist
 
 # run it once
-
-# must have device and driver to run with cuda
+cd ./dist
+y=""
 if test "${WITH_CUDA:-false}" == true ; then
-    OLDPATH="$PATH"
-
-    ./scripts/install-cuda-drivers
+    y=".WITH_CUDA"
+fi
+x=""
+if test "${WSL:-false}" == true ; then
+    x=".WSL"
 fi
 
-./data/download-teddy
-
-./InfiniTAM/build/Apps/InfiniTAM_cli/InfiniTAM_cli Teddy/calib.txt Teddy/Frames/%04i.ppm Teddy/Frames/%04i.pgm
-./InfiniTAM/build/Apps/InfiniTAM/InfiniTAM Teddy/calib.txt Teddy/Frames/%04i.ppm Teddy/Frames/%04i.pgm
+"./InfiniTAM_cli.with-teddy$x$y.sh" # at an average of about 200ms per frame, this takes quite a while for the 500 frames of Teddy...
+"./InfiniTAM.with-teddy$x$y.sh"
