@@ -100,20 +100,7 @@ fi
 if test "${WITH_CUDA:-false}" == true ; then
     OLDPATH="$PATH"
 
-    echo "Your NVIDIA device:"
-    ( lspci | grep -i nvidia | grep -i vga ) || ( lspci | grep -i '3D controller' | grep -i Microsoft ) # wsl: 988f:00:00.0 3D controller: Microsoft Corporation Device 008e
-
-    # Install nvidia driver https://ubuntu.com/server/docs/nvidia-drivers-installation
-    # not needed on WSL, assuming host already has nvidia drivers
-    if ! which explorer.exe ; then
-        sudo ubuntu-drivers list
-        sudo ubuntu-drivers list --gpgpu
-        sudo ubuntu-drivers install nvidia
-        echo "You will need to reboot for the driver to work! Otherwise, you will see:"
-        echo "cuda_compute_capability.cpp
-    -- Compile: Couldn't get device count: no CUDA-capable device is detected
-    "
-    fi
+    ./scripts/install-cuda-drivers
 fi
 
 ./data/download-teddy

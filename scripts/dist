@@ -7,12 +7,18 @@ trap 'echo FATAL ERROR EXIT CODE $? AT $0:$LINENO' ERR
 # WITH_CUDA=true ./scripts/dist
 # WSL=true WITH_CUDA=true ./scripts/dist
 
+INSTALL_CUDA_DRIVERS="true"
+
 if test "${WITH_CUDA:-}" == "true" ; then
     WITH_CUDA=".WITH_CUDA"
+
+    INSTALL_CUDA_DRIVERS="./install-cuda-drivers"
 
     # CUDA binaries appear to be WSL specific (give black screen on real Ubuntu an processing takes 0 time...)
     if test ! -z "${WSL:-}" ; then
         WSL=".WSL"
+    else
+    	WSL=""
     fi
 else
     WITH_CUDA=""
@@ -21,9 +27,10 @@ fi
 
 mkdir -p dist
 
-cp ./InfiniTAM/build/Apps/InfiniTAM_cli/InfiniTAM_cli "./dist/InfiniTAM_cli$WSL$WITH_CUDA"
-cp ./InfiniTAM/build/Apps/InfiniTAM/InfiniTAM "./dist/InfiniTAM$WSL$WITH_CUDA"
-cp ./data/download-teddy ./dist
+cp --verbose ./InfiniTAM/build/Apps/InfiniTAM_cli/InfiniTAM_cli "./dist/InfiniTAM_cli$WSL$WITH_CUDA"
+cp --verbose ./InfiniTAM/build/Apps/InfiniTAM/InfiniTAM "./dist/InfiniTAM$WSL$WITH_CUDA"
+cp --verbose ./data/download-teddy ./dist
+cp --verbose ./scripts/install-cuda-drivers ./dist
 
 function f() {
     output="./dist/InfiniTAM$1.with-teddy$WSL$WITH_CUDA.sh"
@@ -31,7 +38,13 @@ function f() {
     echo -n "#!/bin/bash
     set -euo pipefail
     ./download-teddy
-    ./InfiniTAM$1$WSL$WITH_CUDA Teddy/calib.txt 'Teddy/Frames/%04i.ppm' 'Teddy/Frames/%04i.pgm'
+    
+    test -f /usr/lib/x86_64-linux-gnu/libglut.so.3 || sudo apt-get install -y freeglut3
+
+    function run() {
+        ./InfiniTAM$1$WSL$WITH_CUDA Teddy/calib.txt 'Teddy/Frames/%04i.ppm' 'Teddy/Frames/%04i.pgm'
+    }
+    run || ($INSTALL_CUDA_DRIVERS && run)
     " > "$output"
     chmod +x "$output"
 

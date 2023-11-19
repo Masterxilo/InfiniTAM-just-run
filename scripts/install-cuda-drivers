@@ -1,0 +1,21 @@
+#!/bin/bash
+set -euo pipefail
+IFS=$'\n\t'
+trap 'echo FATAL ERROR EXIT CODE $? AT $0:$LINENO' ERR
+
+echo "Your NVIDIA device:"
+( lspci | grep -i nvidia | grep -i vga ) || ( lspci | grep -i '3D controller' | grep -i Microsoft ) # wsl: 988f:00:00.0 3D controller: Microsoft Corporation Device 008e
+
+# Install nvidia driver https://ubuntu.com/server/docs/nvidia-drivers-installation
+# not needed on WSL, assuming host already has nvidia drivers
+if ! which explorer.exe ; then
+    #sudo ubuntu-drivers list
+    #sudo ubuntu-drivers list --gpgpu
+    sudo ubuntu-drivers install nvidia
+
+    echo ""
+    echo "You will need to reboot for any newly installed nvidia driver to work! Otherwise, you might (still) see errors like:"
+    echo "> cuda_compute_capability.cpp -- Compile: Couldn't get device count: no CUDA-capable device is detected"
+    echo "> /home/ubuntu/InfiniTAM-just-run/InfiniTAM/ITMLib/Objects/Scene/../../../ORUtils/MemoryBlock.h(257) : cudaSafeCall() Runtime API error : CUDA driver version is insufficient for CUDA runtime version."
+    echo ""
+fi
