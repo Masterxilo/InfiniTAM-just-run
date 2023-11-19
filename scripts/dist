@@ -6,7 +6,7 @@ trap 'echo FATAL ERROR EXIT CODE $? AT $0:$LINENO' ERR
 # ./scripts/dist
 # WITH_CUDA=true ./scripts/dist
 
-if test $WITH_CUDA == "true" ; then
+if test "${WITH_CUDA:-}" == "true" ; then
     WITH_CUDA=".WITH_CUDA"
 else
     WITH_CUDA=""
@@ -14,10 +14,18 @@ fi
 
 mkdir -p dist
 
-#./InfiniTAM/build/Apps/InfiniTAM_cli/InfiniTAM_cli Teddy/calib.txt Teddy/Frames/%04i.ppm Teddy/Frames/%04i.pgm
-./InfiniTAM/build/Apps/InfiniTAM/InfiniTAM Teddy/calib.txt Teddy/Frames/%04i.ppm Teddy/Frames/%04i.pgm
-
-cp ./InfiniTAM/build/Apps/InfiniTAM_cli/Release/InfiniTAM_cli "./dist/InfiniTAM_cli$WITH_CUDA.exe"
-cp ./InfiniTAM/build/Apps/InfiniTAM/Release/InfiniTAM "./dist/InfiniTAM$WITH_CUDA.exe"
+cp ./InfiniTAM/build/Apps/InfiniTAM_cli/InfiniTAM_cli "./dist/InfiniTAM_cli$WITH_CUDA"
+cp ./InfiniTAM/build/Apps/InfiniTAM/InfiniTAM "./dist/InfiniTAM$WITH_CUDA"
 cp ./data/download-teddy ./dist
 cp ./scripts/InfiniTAM*.sh ./dist
+
+function f() {
+echo -n "#!/bin/bash
+set -euo pipefail
+./download-teddy
+./InfiniTAM$1$WITH_CUDA Teddy/calib.txt 'Teddy/Frames/%04i.ppm' 'Teddy/Frames/%04i.pgm'
+" > ./dist/InfiniTAM$1.with-teddy$WITH_CUDA.sh
+}
+
+f ''
+f '_cli'
