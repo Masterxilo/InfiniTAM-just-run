@@ -13,6 +13,10 @@ if ($env:WITH_CUDA -eq "true") {
 
 mkdir dist -ErrorAction SilentlyContinue
 
+cp .\InfiniTAM\build\Apps\InfiniTAM_cli\Release\InfiniTAM_cli.exe ".\dist\InfiniTAM_cli$env:WITH_CUDA.exe"
+cp -Force .\InfiniTAM\build\Apps\InfiniTAM_cli\Release\*.dll .\dist
+cp .\InfiniTAM\build\Apps\InfiniTAM\Release\InfiniTAM.exe ".\dist\InfiniTAM$env:WITH_CUDA.exe"
+cp -Force .\InfiniTAM\build\Apps\InfiniTAM\Release\*.dll .\dist
 
 # msvc runtime
 cp -Force .\lib\*.dll .\dist
