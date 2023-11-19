@@ -39,6 +39,10 @@ cmake --version
 choco install -y visualstudio2022-workload-vctools
 
 if ($env:WITH_CUDA -eq "true") {
+    if (-not (Test-Path "C:\Program Files\NVIDIA Corporation")) {
+        choco install -y nvidia-display-driver
+    }
+
     try {
         &(gi "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v*\bin\nvcc.exe") --version
     } catch {
@@ -118,6 +122,7 @@ cd ..\..
 
 ./scripts/dist.ps1
 
+# run it once
 ./data/download-teddy.ps1
 
 &.\InfiniTAM\build\Apps\InfiniTAM_cli\Release\InfiniTAM_cli.exe Teddy/calib.txt Teddy/Frames/%04i.ppm Teddy/Frames/%04i.pgm

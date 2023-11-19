@@ -1,10 +1,9 @@
 # InfiniTAM-just-run
+Build scripts & releases for https://github.com/victorprad/InfiniTAM. Read their readme and https://infinitam.org/ to know what this project is all about.
 
-STATUS: WORK-IN-PROGRESS
 
-This is forked from https://github.com/victorprad/InfiniTAM and you should definitely read their readme and https://infinitam.org/ to know what this project is all about.
-
-However, as I am absolutely opposed to giving any lengthy instructions to humans.
+## Background
+I am absolutely opposed to giving any lengthy instructions to humans.
 I found it an apalling waste of our precious time to list dependencies and steps needed get this code to do what it is supposed to.
 One may list dependencies to explain what they are for, but never for a human to research how to get that dependency installed.
 That is a system maintainer's job.
@@ -14,7 +13,7 @@ You can dig into the code to see which dependencies are used and why.
 
 # Requirements
 ## Minimum
-- Ubuntu 22.04 or Windows 10/11 (WSL also supported) on an x86_64, aka. amd64, processor
+- *Ubuntu 22.04* or *Windows 10/11* (Ubuntu 22.04 in WSL also supported) on an `x86_64`, aka. `amd64`, processor
   - no additional software needs to be preinstalled, you just need a user with root/sudo/admin privileges on your system
 
 ## Additional Hardware

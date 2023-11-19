@@ -1,0 +1,8 @@
+#!/bin/bash
+set -euo pipefail
+IFS=$'/n/t'
+trap 'echo FATAL ERROR EXIT CODE $? AT $0:$LINENO' ERR
+
+rm -f dist.zip
+sudo apt-get install -y zip
+zip  --recurse-paths dist.zip dist --exclude dist/teddy* --exclude "dist/Teddy/*"

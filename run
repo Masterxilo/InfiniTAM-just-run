@@ -105,6 +105,8 @@ pwd
 
 ./scripts/dist
 
+# run it once
 ./data/download-teddy
-#./InfiniTAM/build/Apps/InfiniTAM_cli/InfiniTAM_cli Teddy/calib.txt Teddy/Frames/%04i.ppm Teddy/Frames/%04i.pgm
+
+./InfiniTAM/build/Apps/InfiniTAM_cli/InfiniTAM_cli Teddy/calib.txt Teddy/Frames/%04i.ppm Teddy/Frames/%04i.pgm
 ./InfiniTAM/build/Apps/InfiniTAM/InfiniTAM Teddy/calib.txt Teddy/Frames/%04i.ppm Teddy/Frames/%04i.pgm
