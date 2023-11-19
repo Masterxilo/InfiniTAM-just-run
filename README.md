@@ -17,7 +17,7 @@ You can dig into the code to see which dependencies are used and why.
   - no additional software needs to be preinstalled, you just need a user with root/sudo/admin privileges on your system
 
 ## Additional Hardware
-- for WITH_CUDA: CUDA-capable NVIDIA GTX 8800-series or above (tested with NVIDIA GeForce RTX 2080)
+- for WITH_CUDA: CUDA-capable NVIDIA GTX 8800-series or above (tested with NVIDIA GeForce RTX 2080); we use CUDA 12.3, which requires at least driver version 525.60.13 ([src](https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html))
 - supports original Kinect and XBOX One Kinect (?) for Live Capture: TODO test
 
 # How to Run
