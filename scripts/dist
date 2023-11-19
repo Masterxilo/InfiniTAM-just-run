@@ -5,28 +5,36 @@ trap 'echo FATAL ERROR EXIT CODE $? AT $0:$LINENO' ERR
 
 # ./scripts/dist
 # WITH_CUDA=true ./scripts/dist
+# WSL=true WITH_CUDA=true ./scripts/dist
 
 if test "${WITH_CUDA:-}" == "true" ; then
     WITH_CUDA=".WITH_CUDA"
+
+    # CUDA binaries appear to be WSL specific (give black screen on real Ubuntu an processing takes 0 time...)
+    if test ! -z "${WSL:-}" ; then
+        WSL=".WSL"
+    fi
 else
     WITH_CUDA=""
+    WSL=""
 fi
 
 mkdir -p dist
 
-cp ./InfiniTAM/build/Apps/InfiniTAM_cli/InfiniTAM_cli "./dist/InfiniTAM_cli$WITH_CUDA"
-cp ./InfiniTAM/build/Apps/InfiniTAM/InfiniTAM "./dist/InfiniTAM$WITH_CUDA"
+cp ./InfiniTAM/build/Apps/InfiniTAM_cli/InfiniTAM_cli "./dist/InfiniTAM_cli$WSL$WITH_CUDA"
+cp ./InfiniTAM/build/Apps/InfiniTAM/InfiniTAM "./dist/InfiniTAM$WSL$WITH_CUDA"
 cp ./data/download-teddy ./dist
 
 function f() {
-    output="./dist/InfiniTAM$1.with-teddy$WITH_CUDA.sh"
+    output="./dist/InfiniTAM$1.with-teddy$WSL$WITH_CUDA.sh"
 
-echo -n "#!/bin/bash
-set -euo pipefail
-./download-teddy
-./InfiniTAM$1$WITH_CUDA Teddy/calib.txt 'Teddy/Frames/%04i.ppm' 'Teddy/Frames/%04i.pgm'
-" > "$output"
-chmod +x "$output"
+    echo -n "#!/bin/bash
+    set -euo pipefail
+    ./download-teddy
+    ./InfiniTAM$1$WSL$WITH_CUDA Teddy/calib.txt 'Teddy/Frames/%04i.ppm' 'Teddy/Frames/%04i.pgm'
+    " > "$output"
+    chmod +x "$output"
+
 }
 
 f ''

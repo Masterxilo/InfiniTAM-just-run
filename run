@@ -88,6 +88,10 @@ fi
 
 pwd
 
+if which explorer.exe ; then
+    export WSL='true'
+fi
+
 ./scripts/dist
 
 # run it once
