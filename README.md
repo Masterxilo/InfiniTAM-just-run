@@ -40,5 +40,7 @@ In `cmd` or `powershell`, initially as an admin, do:
 # TODO
 Make this work in a (Docker) container, maybe in a devcontainer. Set up some kind of CI (gitlabci, circleci, travisci) to continuously test the run script still does what it should on a vanilla system.
 
+It seems the WSL built executables run on Ubuntu afterall, so remove the .WSL concept/distinction again.
+
 # Quirks
 - this codebase is incompatible with CUDA Toolkit version 11.5, which unfortunately at the moment is the default version installed by `sudo apt-get install -y nvidia-cuda-toolkit` on Ubuntu 22.04
