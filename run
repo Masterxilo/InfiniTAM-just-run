@@ -88,23 +88,14 @@ fi
 
 pwd
 
-if which explorer.exe ; then
-    export WSL='true'
-fi
-
 ./scripts/dist
 
 # run it once
 cd ./dist
 y=""
-x=""
 if test "${WITH_CUDA:-false}" == true ; then
     y=".WITH_CUDA"
-
-    if test "${WSL:-false}" == true ; then
-        x=".WSL"
-    fi
 fi
 
-"./InfiniTAM_cli.with-teddy$x$y.sh" # at an average of about 200ms per frame, this takes quite a while for the 500 frames of Teddy...
-"./InfiniTAM.with-teddy$x$y.sh"
+"./InfiniTAM_cli.with-teddy$y.sh" # at an average of about 200ms per frame, this takes quite a while for the 500 frames of Teddy...
+"./InfiniTAM.with-teddy$y.sh"
