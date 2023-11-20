@@ -49,7 +49,7 @@ if ($env:WITH_CUDA -eq "true") {
 }
 
 if ($False) {} # TODO OpenNI2 not really required ? skip entirely?
-if (-not (Test-Path .\OpenNI2)) {
+if (-not (Test-Path "C:\Program Files\OpenNI2")) {
     #wget.exe --no-clobber https://s3.amazonaws.com/com.occipital.openni/OpenNI-Windows-x64-2.2.0.33.zip
     #curl.exe https://s3.amazonaws.com/com.occipital.openni/OpenNI-Windows-x64-2.2.0.33.zip -o OpenNI-Windows-x64-2.2.0.33.zip
     cp ./lib/OpenNI-Windows-x64-2.2.0.33.zip .
@@ -58,10 +58,24 @@ if (-not (Test-Path .\OpenNI2)) {
     # note: contains an .msi installer... install to
     # and also install the PrimeSense driver = XBOX Kinect sensor Windows driver... (PrimeSense made that tech, which is now in Apple's iPhone X face ID...)
     # .\OpenNI2\
-    &.\OpenNI-Windows-x64-2.2.0.33\OpenNI-Windows-x64-2.2.msi /quiet
+
+    # TODO this does not wait for the installation to finish, need to busy-wait! runs async...
+    #&.\OpenNI-Windows-x64-2.2.0.33\OpenNI-Windows-x64-2.2.msi /quiet
+
+    # syncrhonous install
+    echo "Installing OpenNI2..."
+    #msiexec.exe /I 
+    .\OpenNI-Windows-x64-2.2.0.33\OpenNI-Windows-x64-2.2.msi #/quiet # only works if admin...
+    while (-not (Test-Path "C:\Program Files\OpenNI2")) {
+        Start-Sleep -Seconds 1
+        
+        echo "still Installing OpenNI2..."
+    }
+
 
     (gi "C:\Program Files\OpenNI2").FullName
 }
+
 
 # https://github.com/FreeGLUTProject/freeglut
 # https://freeglut.sourceforge.net/index.php#download

@@ -46,7 +46,7 @@ function f() {
         ./InfiniTAM$1$WSL$WITH_CUDA Teddy/calib.txt 'Teddy/Frames/%04i.ppm' 'Teddy/Frames/%04i.pgm'
     }
     run || ($INSTALL_CUDA_DRIVERS && run) || {
-        echo 'STILL NOT WORKING You will need to reboot for any newly installed nvidia driver to work!'
+        echo 'STILL NOT WORKING You will need to reboot for any newly installed nvidia driver to work! Known Issue: WSL always segfaults after quitting even normally...'
         exit 1
     }
     " > "$output"

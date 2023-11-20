@@ -97,12 +97,13 @@ fi
 # run it once
 cd ./dist
 y=""
+x=""
 if test "${WITH_CUDA:-false}" == true ; then
     y=".WITH_CUDA"
-fi
-x=""
-if test "${WSL:-false}" == true ; then
-    x=".WSL"
+
+    if test "${WSL:-false}" == true ; then
+        x=".WSL"
+    fi
 fi
 
 "./InfiniTAM_cli.with-teddy$x$y.sh" # at an average of about 200ms per frame, this takes quite a while for the 500 frames of Teddy...
