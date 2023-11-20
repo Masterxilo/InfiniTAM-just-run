@@ -29,7 +29,7 @@ if test "${WITH_CUDA:-false}" == true ; then
 
     # install nvcc
     export PATH="/usr/local/cuda-11.8/bin:/usr/local/cuda-11.5/bin:/usr/local/cuda-12.3/bin:$OLDPATH"
-    if ! which nvcc || ( nvcc --version | grep '11.5' ) ; then 
+    if ! which nvcc || ! ( nvcc --version | grep '12.3' ) ; then 
         ./scripts/install-cuda # sudo apt-get install -y nvidia-cuda-toolkit
     fi
 
