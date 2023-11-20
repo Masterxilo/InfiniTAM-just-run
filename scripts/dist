@@ -40,12 +40,15 @@ function f() {
     set -euo pipefail
     ./download-teddy
     
-    test -f /usr/lib/x86_64-linux-gnu/libglut.so.3 || sudo apt-get install -y freeglut3
+    test -f /usr/lib/x86_64-linux-gnu/libglut.so.3 || sudo apt-get install -y freeglut3 || ( sudo apt-get update && sudo apt-get install -y freeglut3 ) 
 
     function run() {
         ./InfiniTAM$1$WSL$WITH_CUDA Teddy/calib.txt 'Teddy/Frames/%04i.ppm' 'Teddy/Frames/%04i.pgm'
     }
-    run || ($INSTALL_CUDA_DRIVERS && run)
+    run || ($INSTALL_CUDA_DRIVERS && run) || {
+        echo 'STILL NOT WORKING You will need to reboot for any newly installed nvidia driver to work!'
+        exit 1
+    }
     " > "$output"
     chmod +x "$output"
 }

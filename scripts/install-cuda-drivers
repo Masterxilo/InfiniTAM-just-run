@@ -11,6 +11,7 @@ echo "Your NVIDIA device:"
 if ! which explorer.exe ; then
     #sudo ubuntu-drivers list
     #sudo ubuntu-drivers list --gpgpu
+    sudo apt-get update
     sudo ubuntu-drivers install nvidia
 
     echo ""
