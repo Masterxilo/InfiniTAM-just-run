@@ -30,17 +30,12 @@ try {
 make --version
 cmake --version
 
-# cmake only detects MSVC_IDE if the actual IDE is present - buildtools are not enough...: ?
-#choco install -y visualstudio2022professional
-#choco install -y visualstudio2022community
-# nah, still get 'nmake' '-?' command not found...
-
-# this is required for nmake:
-choco install -y visualstudio2022-workload-vctools
+# this is required for nmake, cl, msbuild, link:
+if (-not (Test-Path "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat")) {
+    choco install -y visualstudio2022-workload-vctools
+}
 
 if ($env:WITH_CUDA -eq "true") {
-
-
     try {
         &(gi "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v*\bin\nvcc.exe") --version
     } catch {
