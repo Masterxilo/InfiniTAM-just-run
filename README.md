@@ -4,21 +4,23 @@ Build scripts & releases for https://github.com/victorprad/InfiniTAM. Read their
 
 ## Background
 I am absolutely opposed to giving any lengthy instructions to humans.
-I found it an apalling waste of our precious time to list dependencies and steps needed get this code to do what it is supposed to.
-One may list dependencies to explain what they are for, but never for a human to research how to get that dependency installed.
+I found it an apalling waste of our precious time to list dependencies and steps needed to get some code to do what it is supposed to.
+One may list dependencies to explain what they are for, but this should never be intended as a way to instruct a human to go and research how to get that dependency installed.
 That is a system maintainer's job.
 
+Any worthwhile system can be copied to a vanilla (i.e. empty/freshly set up) instance of it's supported platforms (in this case a blank Ubuntu or Windows machine/vm) and can be compiled and run there with one command: `./run`.
+
 I have created automated scripts that take care of setting up everything required to work with this project.
-You can dig into the code to see which dependencies are used and why.
+You can dig into the code to see which dependencies are used and why. Crucially, this is an executable specification of how to get this project up and running. In the future, I hope to add a continuous integration job (GitHub Action) that runs regularly (even if nothing changed) that checks that the instructions still work.
 
 # Requirements
 ## Minimum
-- *Ubuntu 22.04* or *Windows 10/11* (Ubuntu 22.04 in WSL also supported) on an `x86_64`, aka. `amd64`, processor
-  - no additional software needs to be preinstalled, you just need a user with root/sudo/admin privileges on your system
+- Platforms: *Ubuntu 22.04* or *Windows 10/11* (**Ubuntu 22.04 in WSL also supported, including GUI output**) on an `x86_64`, aka. `amd64`, processor
+  - no additional software needs to be preinstalled, you just need a user with root/sudo/admin privileges on your system (TODO make it work as non-root)
 
 ## Additional Hardware
 - for WITH_CUDA: CUDA-capable NVIDIA GTX 8800-series or above (tested with NVIDIA GeForce RTX 2080); we use CUDA 12.3, which requires at least driver version 525.60.13 ([src](https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html))
-- supports original Kinect and XBOX One Kinect (?) for Live Capture: TODO test
+- supports original Kinect and XBOX One Kinect (?) for Live Capture of the sparse voxel/volumetric isosurface distance field scene: TODO test these functionalities
 
 # How to Run
 
@@ -38,9 +40,8 @@ In `cmd` or `powershell`, initially as an admin, do:
 ```
 
 # TODO
-Make this work in a (Docker) container, maybe in a devcontainer. Set up some kind of CI (gitlabci, circleci, travisci) to continuously test the run script still does what it should on a vanilla system.
-
-It seems the WSL built executables run on Ubuntu afterall, so remove the .WSL concept/distinction again.
+* Make this work in a (Docker) container, maybe also in a devcontainer (expose GUI via X-Server...).
+* Set up some kind of CI (gitlabci, circleci, travisci) to continuously test the run script still does what it should on a vanilla system and display the badges in this readme.
 
 # Quirks
 - this codebase is incompatible with CUDA Toolkit version 11.5, which unfortunately at the moment is the default version installed by `sudo apt-get install -y nvidia-cuda-toolkit` on Ubuntu 22.04
