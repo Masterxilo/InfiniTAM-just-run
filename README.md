@@ -46,6 +46,7 @@ In `cmd` or `powershell`, initially as an admin, do:
 * Make the .bat files pause at the end so errors can be inspected, also write a log file.
 * Test with Kinect Hardware.
 * Try to make it depend on lower minimum CUDA/NVIDIA driver version, i.e. avoid > Runtime API error : CUDA driver version is insufficient for CUDA runtime version. In principle, nothing that happens here requires anything more than the very first version of CUDA probably...
+* Give instructions on how to .\run WITH_CUDA (if possible) or automatically run all versions that can run or so initially... make a distinction between build (including fetching dependencies... the complicated part...) and running a build (the easy part).
 
 # Quirks
 - this codebase is incompatible with CUDA Toolkit version 11.5, which unfortunately at the moment is the default version installed by `sudo apt-get install -y nvidia-cuda-toolkit` on Ubuntu 22.04
