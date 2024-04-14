@@ -20,7 +20,7 @@ You can dig into the code to see which dependencies are used and why. Crucially,
   - no additional software needs to be preinstalled, you just need a user with root/sudo/admin privileges on your system (TODO make it work as non-root)
 
 ## Additional Hardware
-- for WITH_CUDA: CUDA-capable NVIDIA GTX 8800-series or above (tested with NVIDIA GeForce RTX 2080); we use CUDA 12.3, which requires at least driver version 525.60.13 ([src](https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html))
+- for WITH_CUDA: CUDA-capable NVIDIA GTX 8800-series or above (tested with NVIDIA GeForce RTX 2080; currently requires some later graphics cards because we depend on a runtime/driver version not available for these old devices... doesn't work on NVIDIA QUADRO K4000 atm for instance); we use CUDA 12.3, which requires at least driver version 525.60.13 ([src](https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html))
 - supports original Kinect and XBOX One Kinect (?) for Live Capture of the sparse voxel/volumetric isosurface distance field scene: TODO test these functionalities
 
 # How to Run
@@ -43,6 +43,9 @@ In `cmd` or `powershell`, initially as an admin, do:
 # TODO
 * Make this work in a (Docker) container, maybe also in a devcontainer (expose GUI via X-Server...).
 * Set up some kind of CI (gitlabci, circleci, travisci) to continuously test the run script still does what it should on a vanilla system and display the badges in this readme.
+* Make the .bat files pause at the end so errors can be inspected, also write a log file.
+* Test with Kinect Hardware.
+* Try to make it depend on lower minimum CUDA/NVIDIA driver version, i.e. avoid > Runtime API error : CUDA driver version is insufficient for CUDA runtime version. In principle, nothing that happens here requires anything more than the very first version of CUDA probably...
 
 # Quirks
 - this codebase is incompatible with CUDA Toolkit version 11.5, which unfortunately at the moment is the default version installed by `sudo apt-get install -y nvidia-cuda-toolkit` on Ubuntu 22.04
