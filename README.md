@@ -16,7 +16,7 @@ You can dig into the code to see which dependencies are used and why. Crucially,
 
 # Requirements
 ## Minimum
-- Platforms: *Ubuntu 22.04* or *Windows 10/11* (**Ubuntu 22.04 in WSL also supported, including GUI output**) on an `x86_64`, aka. `amd64`, processor
+- Platforms: *Ubuntu 22.04* or *Windows 10/11* (**Ubuntu 22.04 in WSL also supported, including GUI output; both on native Linux/wsl filesystem and on mounted NTFS**) on an `x86_64`, aka. `amd64`, processor
   - no additional software needs to be preinstalled, you just need a user with root/sudo/admin privileges on your system (TODO make it work as non-root)
 
 ## Additional Hardware
@@ -41,6 +41,9 @@ In `cmd` or `powershell`, initially as an admin, do:
 ```
 
 # TODO
+* if OpenNI(2) is not working/being used/tested there's no reason for installing it, in particular because the installer opens a GUI asking where to install it (can we at least run it silently?)
+* on computers with cuda installed but with an old GPU, CUDA version will just silently not build...
+* why run the commandline-version of the demo application first? presumably people would like to see the gui...
 * Make this work in a (Docker) container, maybe also in a devcontainer (expose GUI via X-Server...).
 * Set up some kind of CI (gitlabci, circleci, travisci) to continuously test the run script still does what it should on a vanilla system and display the badges in this readme.
 * Make the .bat files pause at the end so errors can be inspected, also write a log file.
