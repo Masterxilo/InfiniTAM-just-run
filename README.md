@@ -56,7 +56,7 @@ $env:WITH_CUDA=true
 * if OpenNI(2) is not working/being used/tested there's no reason for installing it, in particular because the installer opens a GUI asking where to install it (can we at least run it silently?)
 * on computers with cuda installed but with an old GPU, CUDA version will just silently not build...
 * why run the commandline-version of the demo application first? presumably people would like to see the gui...
-* Make this work in a (Docker) container, maybe also in a devcontainer (expose GUI via X-Server...).
+* Make this work in a (Docker) container, maybe also in a devcontainer (expose GUI via X-Server...). Try to even mount the GPU into it.
 * Set up some kind of CI (gitlabci, circleci, travisci) to continuously test the run script still does what it should on a vanilla system and display the badges in this readme.
 * Make the .bat files pause at the end so errors can be inspected, also write a log file.
 * Test with Kinect Hardware.
