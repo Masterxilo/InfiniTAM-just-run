@@ -189,7 +189,6 @@ try {
     echo "Running the interactive InfiniTAM gui. Use b or n key to start integrating images from the Teddy example dataset into the 3D scene!"
     &".\InfiniTAM.with-teddy$x.bat"
 
-    # run the batch mode cli, no graphical output
     echo "Running the batch mode InfiniTAM cli. Integrating images from the Teddy example dataset into the 3D scene..."
     &".\InfiniTAM_cli.with-teddy$x.bat"
 } finally {

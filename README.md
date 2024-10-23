@@ -16,7 +16,7 @@ You can dig into the code to see which dependencies are used and why. Crucially,
 
 # Requirements
 ## Minimum
-- Platforms: *Ubuntu 22.04* or *Windows 10/11* (**Ubuntu 22.04 in WSL also supported, including GUI output; both on native Linux/wsl filesystem and on mounted NTFS**) on an `x86_64`, aka. `amd64`, processor
+- Platforms: *Ubuntu 22.04* or *Windows 10/11* (**Ubuntu 22.04 in WSL also supported, including GUI output; both on the native Linux/wsl filesystem `/` and on mounted `/mnt/*` NTFS**) on an `x86_64`, aka. `amd64`, processor
   - no additional software needs to be preinstalled, you just need a user with root/sudo/admin privileges on your system (TODO make it work as non-root)
 
 ## Additional Hardware
@@ -28,8 +28,6 @@ You can dig into the code to see which dependencies are used and why. Crucially,
 ## Ubuntu Linux
 ```bash
 ./run
-
-WITH_CUDA=true ./run
 ```
 The user running this must (initially) have sudo privileges so that dependencies can be installed.
 

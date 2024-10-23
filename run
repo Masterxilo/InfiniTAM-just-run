@@ -97,5 +97,8 @@ if test "${WITH_CUDA:-false}" == true ; then
     y=".WITH_CUDA"
 fi
 
-"./InfiniTAM_cli.with-teddy$y.sh" # at an average of about 200ms per frame, this takes quite a while for the 500 frames of Teddy...
+echo "Running the interactive InfiniTAM gui. Use b or n key to start integrating images from the Teddy example dataset into the 3D scene!"
 "./InfiniTAM.with-teddy$y.sh"
+
+echo "Running the batch mode InfiniTAM cli. Integrating images from the Teddy example dataset into the 3D scene..."
+"./InfiniTAM_cli.with-teddy$y.sh"
