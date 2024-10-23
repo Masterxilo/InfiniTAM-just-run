@@ -16,23 +16,43 @@ try {
     Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 }
 
+# run a program, throw on error
+function _ {
+    $command = $args[0]
+
+    if ($args.Length -gt 1) {
+        $cmdArgs = $args[1..($args.Length - 1)]
+    } else {
+        $cmdArgs = @()
+    }
+
+    & $command $cmdArgs
+    
+    # throw on exit code nonzero
+    if ($LASTEXITCODE -ne 0) { throw "Command failed with exit code ${LASTEXITCODE}: $args" }
+}
+
 try {
     Get-Command cmake
 } catch {
-    choco install -y visualstudio2022buildtools make
+    _ choco install -y visualstudio2022buildtools make
     #choco uninstall -y cmake cmake.install
-    choco install -y cmake --installargs 'ADD_CMAKE_TO_PATH=System'
+    _ choco install -y cmake --installargs 'ADD_CMAKE_TO_PATH=System'
 
     Import-Module $env:ChocolateyInstall\helpers\chocolateyProfile.psm1
     refreshenv
 }
+
+# ensure required tools are (now) installed
+Get-Command make
+Get-Command cmake
 
 make --version
 cmake --version
 
 # this is required for nmake, cl, msbuild, link:
 if (-not (Test-Path "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat")) {
-    choco install -y visualstudio2022-workload-vctools
+    _ choco install -y visualstudio2022-workload-vctools
 }
 
 if ($env:WITH_CUDA -eq "true") {
