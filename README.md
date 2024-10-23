@@ -20,7 +20,7 @@ You can dig into the code to see which dependencies are used and why. Crucially,
   - no additional software needs to be preinstalled, you just need a user with root/sudo/admin privileges on your system (TODO make it work as non-root)
 
 ## Additional Hardware
-- for WITH_CUDA: CUDA-capable NVIDIA GTX 8800-series or above (tested with NVIDIA GeForce RTX 2080; currently requires some later graphics cards because we depend on a runtime/driver version not available for these old devices... doesn't work on NVIDIA QUADRO K4000 atm for instance); we use CUDA 12.3, which requires at least driver version 525.60.13 ([src](https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html))
+- for WITH_CUDA: CUDA-capable NVIDIA GTX 8800-series or above (tested with NVIDIA GeForce RTX 2080; currently requires some later graphics cards because we depend on a runtime/driver version not available for these old devices... doesn't work on NVIDIA QUADRO K4000 atm. for instance; last driver for that was version 475.06); we use CUDA 12.3, which requires at least driver version 525.60.13 ([src](https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html))
 - supports original Kinect and XBOX One Kinect (?) for Live Capture of the sparse voxel/volumetric isosurface distance field scene: TODO test these functionalities
 
 # How to Run
