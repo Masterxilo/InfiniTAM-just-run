@@ -28,15 +28,29 @@ You can dig into the code to see which dependencies are used and why. Crucially,
 ## Ubuntu Linux
 ```bash
 ./run
+
+WITH_CUDA=true ./run
 ```
 The user running this must (initially) have sudo privileges so that dependencies can be installed.
 
-Tested on Ubuntu 22.04, amd64.
+Tested on Ubuntu 22.04, amd64. Optionally:
+```bash
+WITH_CUDA=true ./run
+```
 
 ## Windows
-In `cmd` or `powershell`, initially as an admin, do:
+In `cmd` or `powershell`, initially using an admin shell to install missing dependencies, do:
 
 ```cmd
+.\run
+```
+
+Optionally:
+
+```cmd
+REM WITH_CUDA 
+set WITH_CUDA=true
+$env:WITH_CUDA=true
 .\run
 ```
 
