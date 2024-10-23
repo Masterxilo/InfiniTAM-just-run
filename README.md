@@ -1,4 +1,4 @@
-n # InfiniTAM-just-run
+# InfiniTAM-just-run
 Build scripts & binary executable releases for https://github.com/victorprad/InfiniTAM. Read their readme and https://infinitam.org/ to know what this project is all about.
 
 No code was modified, only build infrastructure and dependency management was automated.
